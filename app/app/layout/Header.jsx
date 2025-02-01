@@ -1,5 +1,5 @@
 import React from "react";
-import { ModeToggle } from "../Components/toggle";
+import ModeToggle from "../Components/toggle";
 
 const Header = () => {
   return (
