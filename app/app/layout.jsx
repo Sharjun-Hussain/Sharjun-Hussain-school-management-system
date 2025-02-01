@@ -2,6 +2,7 @@
 import { LuSun } from "react-icons/lu";
 import { Sidebar } from "./layout/sidebar";
 import { ModeToggle } from "./Components/toggle";
+import Header from "./layout/Header";
 
 const Dashboard = ({ children }) => {
   return (
@@ -11,12 +12,7 @@ const Dashboard = ({ children }) => {
           <Sidebar />
         </div>
         <div className="w-full lg:4/5">
-          <div className="ms-3 text-2xl font-bold h-14 items-center flex ">
-            <div className="dark:text-green-400 text-black">Dashboard</div>
-            <div className="ms-auto">
-              <ModeToggle />
-            </div>
-          </div>
+          <Header />
           {children}
         </div>
       </div>

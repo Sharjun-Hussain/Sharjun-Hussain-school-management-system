@@ -99,7 +99,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
     <motion.button
       layout
       onClick={() => setSelected(title)}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors 
+      className={`relative flex h-10 w-full items-center  rounded-md transition-colors 
         ${
           selected === title
             ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300"
@@ -118,7 +118,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.125 }}
-          className="text-xs font-medium"
+          className="text-xs font-semibold"
         >
           {title}
         </motion.span>
