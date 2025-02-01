@@ -1,5 +1,7 @@
 import React from "react";
 import ModeToggle from "../Components/toggle";
+import { HeaderDropDownMenu } from "../Components/HeaderDropDown";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header = () => {
   return (
@@ -12,8 +14,18 @@ const Header = () => {
         <div className="text-black dark:text-white">Dashboard</div>
 
         {/* Mode Toggle Button */}
-        <div className="ms-auto">
+        <div className="ms-auto flex">
           <ModeToggle />
+          <HeaderDropDownMenu
+            Component={
+              <div className="mr-2 my-auto hover:cursor-pointer">
+                <Avatar className="w-7 h-7">
+                  <AvatarImage src="#" />
+                  <AvatarFallback>C</AvatarFallback>
+                </Avatar>
+              </div>
+            }
+          />
         </div>
       </div>
     </div>
