@@ -26,7 +26,8 @@ const MusicPlayer = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRef = useRef(new Audio(songs[currentSongIndex].src));
+  const audioRef = useRef(new Audio());
+  // const audioRef = useRef(new Audio(songs[currentSongIndex].src));
 
   useEffect(() => {
     const audio = audioRef.current;

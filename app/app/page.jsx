@@ -1,46 +1,74 @@
 "use client";
-import React, { useEffect } from "react";
-import SoundControl from "./Components/SoundControl";
-import MusicPlayer from "./Components/SoundControl";
-import Time from "./Components/Time";
-import SelectTimeTable from "./Components/SelectTimeTable";
-import Timetable from "./Components/TimeTable";
+import { CircleArrowDown } from "lucide-react";
+import React, { memo, useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+// Ensure this is correctly imported
 
-const page = () => {
-  useEffect(() => {
-    console.log("page started");
-  }, []);
+const BackgroundGradient = memo(({ className }) => {
+  return <div className={className} />;
+});
+
+const Page = () => {
+  const [value, setValue] = useState(new Date());
 
   return (
-    <div className="">
-      <div className="lg:flex space-y-3  block">
-        <div className=" -z-10  absolute right-0 top-0 bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-2xl h-32 w-32 text-white"></div>
+    <div>
+      {/* Background gradients */}
+      <div className="relative lg:flex space-y-3 block">
+        <BackgroundGradient className="absolute right-0 -top-24 -z-10 bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-2xl h-32 w-32 text-white" />
+        <BackgroundGradient className="hidden lg:block absolute left-25 top-20 -z-10 bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-[180px] h-[400px] w-[450px] text-white" />
+        <BackgroundGradient className="absolute left-25 top-0 -z-9 bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-[180px] h-[200px] w-[150px] text-white" />
+      </div>
 
-        <div className=" -z-10 hidden lg:block absolute left-25 top-20  bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-[180px] h-[400px] w-[450px] text-white"></div>
-        <div className=" -z-9   absolute left-25 top-0  bg-gradient-to-br from-purple-500/30 to-blue-500/30 blur-[180px] h-[200px] w-[150px] text-white"></div>
-
-        <div className="lg:w-1/3  w-full">
-          {" "}
-          <MusicPlayer />
-        </div>
-        <div className="mx-3 flex flex-grow">
-          <div
-            className={`flex items-center justify-between xl:w-full  p-4 lg:w-full w-full rounded-xl shadow-lg backdrop-blur-md transition sm:flex-row flex-col h-auto
-          dark:bg-black/30 dark:border-white/20 dark:text-white
-          bg-white/30 border-black/20 text-black`}
-          >
-            {" "}
-            <Time />
-            <div className="flex flex-col items-center">
-              <div className="text-2xl text-center"> 2025-02-03</div>
-              <SelectTimeTable />
+      {/* Flex container for cards and calendar */}
+      <div className="mx-3 lg:flex gap-3 items-start ">
+        {/* Cards container */}
+        <div className="lg:w-2/3 space-y-3">
+          {/* Card components */}
+          <div className=" w-full flex flex-wrap gap-3">
+            <div className="joon-card space-y-3">
+              <div className="dark:text-white/70">Students</div>
+              <div className="flex justify-between">
+                <div className="font-bold text-2xl">540</div>
+                <div>
+                  <CircleArrowDown size={30} className="rotate-180" />
+                </div>
+              </div>
+            </div>
+            <div className="joon-card space-y-3">
+              <div className="dark:text-white/70">Teachers</div>
+              <div className="flex justify-between">
+                <div className="font-bold text-2xl">540</div>
+                <div>
+                  <CircleArrowDown size={30} className="rotate-180" />
+                </div>
+              </div>
+            </div>
+            <div className="joon-card space-y-3">
+              <div className="dark:text-white/70">Parents</div>
+              <div className="flex justify-between">
+                <div className="font-bold text-2xl">540</div>
+                <div>
+                  <CircleArrowDown size={30} className="rotate-180" />
+                </div>
+              </div>
             </div>
           </div>
+
+          <div className="joon-card">sdfr</div>
+        </div>
+
+        {/* Calendar container */}
+        <div className="lg:w-1/3 w-full">
+          <Calendar value={value} onChange={setValue} />
         </div>
       </div>
-      <div>{/* <Timetable /> */}</div>
+
+      {/* Text section below the cards and calendar */}
+      <div className="mx-3 mt-6">sefw</div>
     </div>
   );
 };
 
-export default page;
+export default memo(Page);
