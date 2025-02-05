@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import SelectTimeTable from "../Components/SelectTimeTable";
 import MusicPlayer from "../Components/SoundControl";
 import Time from "../Components/Time";
+import { Pause, Play } from "lucide-react";
 
 const page = () => {
   useEffect(() => {
@@ -37,7 +38,117 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div>{/* <Timetable /> */}</div>
+      <div className="flex flex-col lg:flex-row w-full justify-start">
+        <div className="mx-3 lg:w-1/3 md:w-1/2  w-full">
+          <div className="joon-card my-3 w-full">
+            <div className="font-bold mb-2 text-lg">Today Schedule</div>
+            <div>
+              <table className="w-full ">
+                <tbody>
+                  {Array(7)
+                    .fill(0)
+                    .map((_, index) => (
+                      <tr key={index} className="">
+                        <td className="p-1 text-start border-r  border-gray-300">
+                          07.30 AM - 07.45 AM
+                        </td>
+                        <td className=" text-center">School Start</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col mx-3 h-fit  lg:w-2/3 md:w-1/2  w-full">
+          <div className="joon-card my-3 w-full">
+            <div className="font-bold  text-lg flex justify-between">
+              <div> Ongoing Period : 08.20 AM - 09.00 AM </div>|{" "}
+              <div>Next Period : 08.20 AM - 09.00 AM</div>
+            </div>
+          </div>
+          <div className="flex mx-auto mt-4 gap-3">
+            <div
+              className="cursor-pointer w-20 h-20 dark:text-white hover:bg-amber-800/55
+    bg-amber-400/40 border-black/20 text-black p-3  shadow-lg backdrop-blur-md transition   rounded-full flex items-center justify-center"
+            >
+              <div className="text-sm ">
+                <div className="flex">
+                  {" "}
+                  <Play size={16} /> / <Pause size={16} />
+                </div>
+              </div>
+            </div>
+            <div
+              className=" cursor-pointer w-20 h-20 dark:text-white  hover:bg-green-800/55
+    bg-green-400/40 border-black/20 text-black p-3  shadow-lg backdrop-blur-md transition   rounded-full flex items-center justify-center"
+            >
+              <div className="text-sm ">
+                <div className="flex">
+                  {" "}
+                  <Play size={16} />
+                </div>
+              </div>
+            </div>
+            <div
+              className="cursor-pointer w-20 h-20  dark:text-white hover:dark:blue-800/35 hover:bg-blue-800/55
+    bg-blue-400/40 border-black/20 text-black p-3  shadow-lg backdrop-blur-md transition   rounded-full flex items-center justify-center"
+            >
+              <div className="text-sm ">
+                <div className="flex">
+                  {" "}
+                  <Play size={16} />
+                </div>
+              </div>
+            </div>
+            <div
+              className="cursor-pointer w-20 h-20 dark:text-white  hover:bg-red-800/55
+    bg-red-400/40 border-black/20 text-black p-3  shadow-lg backdrop-blur-md transition   rounded-full flex items-center justify-center"
+            >
+              <div className="text-sm ">
+                <div className="flex">
+                  {" "}
+                  <Play size={16} />
+                </div>
+              </div>
+            </div>
+            <div
+              className="cursor-pointer w-20 h-20  dark:text-white hover:bg-yellow-800/55
+    bg-yellow-400/40 border-black/20 text-black p-3  shadow-lg backdrop-blur-md transition   rounded-full flex items-center justify-center"
+            >
+              <div className="text-sm ">
+                <div className="flex">
+                  {" "}
+                  <Play size={16} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-10 mt-12">
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 bg-green-400/40 " /> -{" "}
+              <div>School Start Bell</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 bg-amber-400/40 " /> -{" "}
+              <div>School Start Bell</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 bg-yellow-400/40 " /> -{" "}
+              <div>School Start Bell</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 bg-blue-400/40 " /> -{" "}
+              <div>Intervel Bell</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 bg-red-400/40 " /> -{" "}
+              <div>School Over Bell</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

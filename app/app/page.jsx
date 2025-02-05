@@ -1,8 +1,11 @@
 "use client";
 import { CircleArrowDown } from "lucide-react";
 import React, { memo, useState } from "react";
+import ReactApexChart from "react-apexcharts";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { BarchartData1 } from "./config/Chart/Barchart1";
+import NoticeBoard from "./Components/NoticeBoard";
 // Ensure this is correctly imported
 
 const BackgroundGradient = memo(({ className }) => {
@@ -56,7 +59,26 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="joon-card">sdfr</div>
+          {/* Barchart */}
+          <div className="joon-card  w-full">
+            <div className="w-full">
+              <h1 className="font-bold md:text-lg text-sm">
+                Student Attendance
+              </h1>
+              <div id="chart">
+                <ReactApexChart
+                  options={BarchartData1.options}
+                  series={BarchartData1.series}
+                  type="bar"
+                  height={350}
+                />
+              </div>
+            </div>
+          </div>
+          {/* Noticeboard */}
+          <div className="joon-card w-full">
+            <NoticeBoard />
+          </div>
         </div>
 
         {/* Calendar container */}
@@ -64,9 +86,6 @@ const Page = () => {
           <Calendar value={value} onChange={setValue} />
         </div>
       </div>
-
-      {/* Text section below the cards and calendar */}
-      <div className="mx-3 mt-6">sefw</div>
     </div>
   );
 };
