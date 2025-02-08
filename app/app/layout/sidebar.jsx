@@ -16,6 +16,7 @@ import {
   LuUserRound,
   LuUserSearch,
 } from "react-icons/lu";
+import Link from "next/link";
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -36,6 +37,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          navigation="/app"
         />
         <Option
           Icon={LuBell}
@@ -44,6 +46,7 @@ export const Sidebar = () => {
           setSelected={setSelected}
           open={open}
           notifs={3}
+          navigation="app/bell-system"
         />
         <Option
           Icon={LuUserSearch}
@@ -51,6 +54,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          navigation="app/teachers"
         />
         <Option
           Icon={LuUserRound}
@@ -58,6 +62,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          navigation="app/student"
         />
         <Option
           Icon={FiTag}
@@ -65,6 +70,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          navigation="app/parents"
         />
         <Option
           Icon={FiBarChart}
@@ -72,6 +78,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
+          navigation="app/attendance"
         />
         <Option
           Icon={LuMessageCircle}
@@ -79,13 +86,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-        />
-        <Option
-          Icon={LuQrCode}
-          title="QR Code Management"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
+          navigation="/app/sms-notification"
         />
       </div>
 
@@ -94,7 +95,15 @@ export const Sidebar = () => {
   );
 };
 
-const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
+const Option = ({
+  Icon,
+  title,
+  selected,
+  setSelected,
+  open,
+  notifs,
+  navigation,
+}) => {
   return (
     <motion.button
       layout
@@ -113,15 +122,17 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
         <Icon />
       </motion.div>
       {open && (
-        <motion.span
-          layout
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.125 }}
-          className="text-xs font-semibold"
-        >
-          {title}
-        </motion.span>
+        <Link href={navigation}>
+          <motion.span
+            layout
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.125 }}
+            className="text-xs font-semibold"
+          >
+            {title}
+          </motion.span>
+        </Link>
       )}
       {notifs && open && (
         <motion.span

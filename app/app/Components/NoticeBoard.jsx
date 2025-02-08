@@ -17,7 +17,7 @@ const NoticeBoard = () => {
       </div>
 
       <div className="mt-3">
-        <div>sdfds</div>
+        <div></div>
       </div>
     </div>
   );
