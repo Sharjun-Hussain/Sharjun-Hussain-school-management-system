@@ -11,30 +11,37 @@ import TimetableDialog from "./Components/TimeTableEditor";
 import { Button } from "@/components/ui/button";
 
 const Page = () => {
+  const audioRef = useRef(null);
   const [SelectedTimeTable, setSelectedTimeTable] = useState("R_Time");
-  const {
-    timetable: TimetableData,
-    loading: timeTableLoading,
-    error,
-    addPeriod,
-    deletePeriod,
-    updatePeriod,
-  } = useFetchTimetable({ type: SelectedTimeTable });
-  const [audio] = useState(new Audio("/bell.mp3"));
+  const { timetable: TimetableData, loading: timeTableLoading } =
+    useFetchTimetable({ type: SelectedTimeTable });
+  // const [audio] = useState(new Audio("/bell.mp3"));
   const [isPlaying, setIsPlaying] = useState(false);
+  // const togglePlay = () => {
+  //   if (isPlaying) {
+  //     audio.pause();
+  //   } else {
+  //     audio.play();
+  //   }
+  //   setIsPlaying(!isPlaying);
+  // };
+
+  useEffect(() => {
+    // Initialize the Audio object only on the client
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio("/bell.mp3");
+    }
+  }, []);
+
   const togglePlay = () => {
+    if (!audioRef.current) return;
     if (isPlaying) {
-      audio.pause();
+      audioRef.current.pause();
     } else {
-      audio.play();
+      audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
   };
-
-  useEffect(() => {
-    console.log("page started");
-  }, []);
-
   const handleTimeTableChange = (value) => {
     setSelectedTimeTable(value);
   };
