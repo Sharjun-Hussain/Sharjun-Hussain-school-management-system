@@ -7,9 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useState } from "react";
 
-const SelectTimeTable = () => {
+const SelectTimeTable = ({ onSelect, SelectedTimeTable }) => {
+  const handleSelect = (value) => {
+    onSelect(value);
+  };
   return (
     <div className="mx-3 ">
       <div className="w-full">
@@ -18,18 +21,17 @@ const SelectTimeTable = () => {
         </div>
 
         {/* Adding margin-top for spacing between heading and select */}
-        <Select className="mt-4">
+        <Select className="mt-4" onValueChange={handleSelect}>
           <SelectTrigger className="w-full mt-2">
-            <SelectValue placeholder="Select TimeTable" />
+            <SelectValue placeholder="Regular" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Regular</SelectLabel>
-              <SelectItem selected value="Reqular">
-                Reguler
+              <SelectItem selected value="R_Time">
+                Regular
               </SelectItem>
-              <SelectItem value="banana">Special</SelectItem>
-              <SelectItem value="blueberry">Saturday</SelectItem>
+              <SelectItem value="F_Time">Friday</SelectItem>
+              <SelectItem value="E_Time">Exams</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

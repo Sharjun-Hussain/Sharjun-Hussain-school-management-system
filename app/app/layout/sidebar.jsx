@@ -46,23 +46,23 @@ export const Sidebar = () => {
           setSelected={setSelected}
           open={open}
           notifs={3}
-          navigation="app/bell-system"
+          navigation="/app/bell"
         />
-        <Option
+        {/* <Option
           Icon={LuUserSearch}
           title="Teachers"
           selected={selected}
           setSelected={setSelected}
           open={open}
           navigation="app/teachers"
-        />
+        /> */}
         <Option
           Icon={LuUserRound}
           title="Students"
           selected={selected}
           setSelected={setSelected}
           open={open}
-          navigation="app/student"
+          navigation="/app/student"
         />
         <Option
           Icon={FiTag}
@@ -70,7 +70,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-          navigation="app/parents"
+          navigation="/app/parents"
         />
         <Option
           Icon={FiBarChart}
@@ -78,7 +78,7 @@ export const Sidebar = () => {
           selected={selected}
           setSelected={setSelected}
           open={open}
-          navigation="app/attendance"
+          navigation="/app/attendance"
         />
         <Option
           Icon={LuMessageCircle}
@@ -105,24 +105,24 @@ const Option = ({
   navigation,
 }) => {
   return (
-    <motion.button
-      layout
-      onClick={() => setSelected(title)}
-      className={`relative flex h-10 w-full items-center  rounded-md transition-colors 
-        ${
-          selected === title
-            ? "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300"
-            : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-        }`}
-    >
-      <motion.div
+    <Link href={navigation} className="block">
+      <motion.button
         layout
-        className="grid h-full w-10 place-content-center text-lg"
+        onClick={() => setSelected(title)}
+        className={`relative flex h-10 w-full items-center rounded-md transition-colors 
+          ${
+            selected === title
+              ? "bg-amber-200/30 text-amber-400"
+              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-amber-200/20"
+          }`}
       >
-        <Icon />
-      </motion.div>
-      {open && (
-        <Link href={navigation}>
+        <motion.div
+          layout
+          className="grid h-full w-10 place-content-center text-lg"
+        >
+          <Icon />
+        </motion.div>
+        {open && (
           <motion.span
             layout
             initial={{ opacity: 0, y: 12 }}
@@ -132,19 +132,19 @@ const Option = ({
           >
             {title}
           </motion.span>
-        </Link>
-      )}
-      {notifs && open && (
-        <motion.span
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
-          className="absolute right-2  size-4 rounded bg-indigo-500 text-xs text-white"
-        >
-          {notifs}
-        </motion.span>
-      )}
-    </motion.button>
+        )}
+        {notifs && open && (
+          <motion.span
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5 }}
+            className="absolute right-2 size-4 rounded bg-amber-300/60 text-xs text-white"
+          >
+            {notifs}
+          </motion.span>
+        )}
+      </motion.button>
+    </Link>
   );
 };
 
@@ -182,7 +182,7 @@ const Logo = () => {
   return (
     <motion.div
       layout
-      className="grid size-10 shrink-0 place-content-center rounded-md bg-indigo-600"
+      className="grid size-10 shrink-0 place-content-center rounded-md bg-amber-600"
     >
       <svg
         width="24"

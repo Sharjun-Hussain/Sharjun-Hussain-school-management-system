@@ -10,11 +10,25 @@ export const BarchartData1 = {
       height: 350,
       type: "bar",
     },
+    colors: ["#fbbf24"], // Tailwind amber-400
     plotOptions: {
       bar: {
         borderRadius: 10,
         dataLabels: {
           position: "top",
+        },
+        fill: {
+          type: "gradient",
+          gradient: {
+            shade: "light",
+            type: "vertical",
+            shadeIntensity: 0.25,
+            gradientToColors: ["#f59e0b"], // Slightly darker amber for gradient
+            inverseColors: true,
+            opacityFrom: 0.85,
+            opacityTo: 0.85,
+            stops: [50, 0, 100],
+          },
         },
       },
     },
@@ -29,7 +43,6 @@ export const BarchartData1 = {
         colors: ["#304758"],
       },
     },
-
     xaxis: {
       categories: [
         "Jan",

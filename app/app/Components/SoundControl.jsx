@@ -7,16 +7,16 @@ import { useTheme } from "next-themes";
 
 const songs = [
   {
-    title: "Lost in Time",
-    artist: "John Doe",
-    src: "/music/song1.mp3",
-    cover: "/images/cover1.jpg",
+    title: "National Anthem",
+    artist: "Srilanka",
+    src: "/srilanka.mp3",
+    cover: "/srilanka.jpg",
   },
   {
-    title: "Echoes of the Night",
-    artist: "Jane Smith",
-    src: "/music/song2.mp3",
-    cover: "/images/cover2.jpg",
+    title: "School Anthem",
+    artist: "GMMS",
+    src: "/bell.mp3",
+    cover: "/gmms.png",
   },
 ];
 
@@ -26,32 +26,42 @@ const MusicPlayer = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioRef = useRef(new Audio());
-  // const audioRef = useRef(new Audio(songs[currentSongIndex].src));
+  const audioRef = useRef(null); // Initialize with null
 
+  // Initialize audio only on the client side
   useEffect(() => {
-    const audio = audioRef.current;
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const setAudioDuration = () => setDuration(audio.duration);
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio(songs[currentSongIndex].src);
 
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", setAudioDuration);
+      const updateTime = () => setCurrentTime(audioRef.current.currentTime);
+      const setAudioDuration = () => setDuration(audioRef.current.duration);
 
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", setAudioDuration);
-    };
+      audioRef.current.addEventListener("timeupdate", updateTime);
+      audioRef.current.addEventListener("loadedmetadata", setAudioDuration);
+
+      return () => {
+        audioRef.current.removeEventListener("timeupdate", updateTime);
+        audioRef.current.removeEventListener(
+          "loadedmetadata",
+          setAudioDuration
+        );
+      };
+    }
   }, []);
 
   useEffect(() => {
-    audioRef.current.src = songs[currentSongIndex].src;
-    if (isPlaying) audioRef.current.play();
+    if (audioRef.current) {
+      audioRef.current.src = songs[currentSongIndex].src;
+      if (isPlaying) audioRef.current.play();
+    }
   }, [currentSongIndex]);
 
   const togglePlayPause = () => {
-    if (isPlaying) audioRef.current.pause();
-    else audioRef.current.play();
-    setIsPlaying(!isPlaying);
+    if (audioRef.current) {
+      if (isPlaying) audioRef.current.pause();
+      else audioRef.current.play();
+      setIsPlaying(!isPlaying);
+    }
   };
 
   const skipForward = () =>
@@ -60,9 +70,11 @@ const MusicPlayer = () => {
     setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
 
   const handleSeek = (e) => {
-    const newTime = (e.target.value / 100) * duration;
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
+    if (audioRef.current) {
+      const newTime = (e.target.value / 100) * duration;
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
   };
 
   const formatTime = (time) => {

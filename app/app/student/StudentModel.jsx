@@ -1,4 +1,4 @@
-"use client";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,112 +11,115 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import RFIDCard from "../Components/Rfid";
+import Image from "next/image";
 
-export default function StudentModel({
+const StudentModel = ({
   onUpdate,
   OpenModal,
   setOpenModal,
   existingOffice,
-}) {
-  const [code, setCode] = useState(existingOffice?.code || "");
-  const [divisionName, setDivisionName] = useState(
-    existingOffice?.division || ""
-  );
-  const [office_name, setOfficeName] = useState(
-    existingOffice?.office_name || ""
-  );
+}) => {
+  const [indexNumber, setIndexNumber] = useState("");
+  const [Name, setName] = useState(existingOffice?.Name || "");
+  const [Initial, setInitial] = useState("");
   const [address, setAddress] = useState(existingOffice?.address || "");
-  const [phone_number, setPhoneNumber] = useState(
-    existingOffice?.phone_number || ""
-  );
-  const [email, setEmail] = useState(existingOffice?.email || "");
+  const [parentName, setParentName] = useState("");
+  const [parentPhone, setParentPhone] = useState("");
+  const [studentImage, setStudentImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const isEditing = !!existingOffice;
 
-  const division = (divisionname) => {
-    setDivisionName(divisionname);
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setStudentImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
+
+  // Cleanup function for image preview URL
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
+
+      // Create FormData to handle file upload
+      const formData = new FormData();
+      formData.append("indexNumber", indexNumber);
+      formData.append("Name", Name);
+      formData.append("address", address);
+      formData.append("parentName", parentName);
+      formData.append("parentPhone", parentPhone);
+      if (studentImage) {
+        formData.append("studentImage", studentImage);
+      }
+
       const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/office${
         isEditing ? `/${existingOffice.id}` : ""
       }`;
-      const method = isEditing ? "put" : "post";
+
       const res = await axios({
-        method,
+        method: isEditing ? "put" : "post",
         url,
-        data: { code, office_name, address, phone_number, email, divisionName },
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        data: formData,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.status === 200 || res.status === 201) {
         toast.success(
           `${
             isEditing
-              ? "Office Branch Updated Successfully"
-              : "Office Branch Added Successfully"
+              ? "Student Updated Successfully"
+              : "Student Added Successfully"
           }`,
           { duration: 1600, position: "top-right" }
         );
         setLoading(false);
-
         onUpdate(res.data.data);
-        setCode("");
-        setDivisionName(""), setOfficeName("");
-        setAddress("");
-        setPhoneNumber("");
-        setEmail("");
-
+        resetForm();
         setOpenModal(false);
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.errors) {
-        const errorMessages = err.response.data.errors;
-
-        // Loop through each field in the error object
-        Object.keys(errorMessages).forEach((field) => {
-          const fieldErrors = errorMessages[field];
-
-          // Show a toast for each error message related to the field
-          fieldErrors.forEach((errorMessage) => {
-            toast.error(`${field}: ${errorMessage}`, {
-              duration: 4000, // Duration for each toast
-              position: "top-right", // Position of the toast
-            });
-          });
-        });
-      } else {
-        setError("An unexpected error occurred.");
-        toast.error("An unexpected error occurred.", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-      setLoading(false);
-    } finally {
+      setError("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.", {
+        duration: 4000,
+        position: "top-right",
+      });
       setLoading(false);
     }
   };
 
+  const resetForm = () => {
+    setIndexNumber("");
+    setName("");
+    setAddress("");
+    setParentName("");
+    setParentPhone("");
+    setStudentImage(null);
+    setImagePreview(null);
+  };
+
   useEffect(() => {
     if (existingOffice) {
-      setCode(existingOffice.code);
-      setDivisionName(existingOffice.division);
-      setOfficeName(existingOffice.office_name);
+      setIndexNumber(existingOffice.indexNumber || "");
+      setName(existingOffice.Name);
       setAddress(existingOffice.address);
-      setPhoneNumber(existingOffice.phone_number);
-      setEmail(existingOffice.email);
-    } else {
-      setCode("");
-      setDivisionName(""), setOfficeName("");
-      setAddress("");
-      setPhoneNumber("");
-      setEmail("");
+      setImagePreview(existingOffice.studentImage || null);
     }
   }, [existingOffice]);
 
@@ -124,106 +127,80 @@ export default function StudentModel({
 
   return (
     <Dialog open={OpenModal} onOpenChange={setOpenModal}>
-      <DialogContent className="sm:max-w-[455px] w-full bg-card dark:bg-accent">
-        {error && <p>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>
-              {isEditing ? "Edit Branch Office" : "Add Branch Office"}
-            </DialogTitle>
-            <DialogDescription className="text-gray-600">
-              Make changes to your profile here. Click save when done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-row gap-4 pt-4">
-            <div className="flex-row">
-              <div className="items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Branch Name
-                </Label>
-                <Input
-                  id="name"
-                  value={office_name}
-                  onChange={(e) => setOfficeName(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="items-center gap-4 pt-4">
-                <Label htmlFor="branchcode" className="text-right">
-                  Branch Code
-                </Label>
-                <Input
-                  id="branchcode"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <div className="flex-row">
-              <div className="items-center gap-4">
-                <Label htmlFor="email" className="text-right">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="items-center gap-4 pt-4">
-                <Label htmlFor="phone_number" className="text-right">
-                  Phone Number
-                </Label>
-                <Input
-                  id="phone_number"
-                  value={phone_number}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="items-center gap-4">
-              <Label htmlFor="address" className="text-right">
-                Address
-              </Label>
+      <DialogContent className="sm:max-w-[455px] lg:max-w-5xl w-full">
+        {error && <p className="text-red-500">{error}</p>}
+        <div className="flex justify-between gap-8">
+          <form onSubmit={handleSubmit} className="flex-1">
+            <DialogHeader>
+              <DialogTitle>
+                {isEditing ? "Edit Student" : "Add Student"}
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Make changes to the student profile here. Click save when done.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col gap-4 pt-4">
+              <Label>Index Number</Label>
               <Input
-                id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="col-span-3"
+                value={indexNumber}
+                onChange={(e) => setIndexNumber(e.target.value)}
+              />
+              <Label>Full Name</Label>
+              <Input value={Name} onChange={(e) => setName(e.target.value)} />
+              <Label>Name with initials</Label>
+              <Input
+                value={Initial}
+                onChange={(e) => setInitial(e.target.value)}
+              />
+              <Label>Parent/Guardian Name</Label>
+              <Input
+                value={parentName}
+                onChange={(e) => setParentName(e.target.value)}
+              />
+              <Label>Parent/Guardian Phone</Label>
+              <Input
+                value={parentPhone}
+                onChange={(e) => setParentPhone(e.target.value)}
+              />
+              <Label>Upload Student Image</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
               />
             </div>
-          </div>
+            <DialogFooter>
+              <Button
+                className="mt-4"
+                disabled={loading}
+                variant="outline"
+                type="submit"
+              >
+                {loading
+                  ? "Loading..."
+                  : isEditing
+                  ? "Update Student"
+                  : "Add Student"}
+              </Button>
+            </DialogFooter>
+          </form>
 
-          <div>
-            <div className="items-center gap-4">
-              <Label htmlFor="address" className="text-right">
-                Select Division
-              </Label>
-
-              {/* <DivisionComboBox divisionName={division} /> */}
-            </div>
+          <div className=" justify-center items-center my-auto">
+            <RFIDCard
+              student={{
+                indexNumber,
+                Name,
+                parentName,
+                Initial,
+                parentPhone,
+                studentImage: imagePreview,
+              }}
+            />
           </div>
-          <DialogFooter>
-            <Button
-              className="mt-4"
-              disabled={loading}
-              variant="outline"
-              type="submit"
-            >
-              {loading
-                ? "Loading..."
-                : isEditing
-                ? "Update Branch"
-                : "Add Branch"}
-            </Button>
-          </DialogFooter>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default StudentModel;
