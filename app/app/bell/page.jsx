@@ -10,7 +10,7 @@ import Timetable from "./Components/TimeTable";
 import TimetableDialog from "./Components/TimeTableEditor";
 import { Button } from "@/components/ui/button";
 
-const page = () => {
+const Page = () => {
   const [SelectedTimeTable, setSelectedTimeTable] = useState("R_Time");
   const {
     timetable: TimetableData,

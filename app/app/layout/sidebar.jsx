@@ -48,14 +48,6 @@ export const Sidebar = () => {
           notifs={3}
           navigation="/app/bell"
         />
-        {/* <Option
-          Icon={LuUserSearch}
-          title="Teachers"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          navigation="app/teachers"
-        /> */}
         <Option
           Icon={LuUserRound}
           title="Students"
@@ -63,6 +55,22 @@ export const Sidebar = () => {
           setSelected={setSelected}
           open={open}
           navigation="/app/student"
+        />
+        <Option
+          Icon={LuUserSearch}
+          title="Teachers"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          navigation="app/grade"
+        />
+        <Option
+          Icon={LuUserSearch}
+          title="Teachers"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          navigation="app/class"
         />
         <Option
           Icon={FiTag}
