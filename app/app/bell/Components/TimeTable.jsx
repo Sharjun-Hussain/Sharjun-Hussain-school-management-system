@@ -3,18 +3,33 @@ import PropTypes from "prop-types";
 
 // Utility function to format time
 const formatTime = (time) => {
-  if (typeof time !== "number" || time < 0 || time > 2359) {
+  if (typeof time !== "number") return "Invalid Time";
+
+  const str = time.toString().padStart(6, "0"); // ensures at least 6 digits
+  let hours = parseInt(str.slice(0, 2), 10);
+  const minutes = str.slice(2, 4);
+  const seconds = str.slice(4, 6);
+
+  // Basic validations
+  if (
+    hours < 0 ||
+    hours > 23 ||
+    parseInt(minutes) > 59 ||
+    parseInt(seconds) > 59
+  ) {
     return "Invalid Time";
   }
 
-  const strTime = time.toString().padStart(4, "0");
-  let hours = parseInt(strTime.slice(0, 2), 10);
-  const minutes = strTime.slice(2, 4);
   const period = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
 
-  hours = hours % 12 || 12; // Convert to 12-hour format
+  // Format output based on seconds
+  const formatted =
+    seconds === "00"
+      ? `${hours}:${minutes} ${period}`
+      : `${hours}:${minutes}:${seconds} ${period}`;
 
-  return `${hours}:${minutes} ${period}`;
+  return formatted;
 };
 
 // Predefined periods for the timetable
